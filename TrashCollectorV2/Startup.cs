@@ -12,6 +12,7 @@ using TrashCollectorV2.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TrashCollectorV2.Contracts;
 
 namespace TrashCollectorV2
 {
@@ -35,6 +36,8 @@ namespace TrashCollectorV2
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
