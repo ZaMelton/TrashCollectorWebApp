@@ -1,18 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TrashCollectorV2.Contracts;
+using TrashCollectorV2.Models;
 
 namespace TrashCollectorV2.Controllers
 {
     public class EmployeeController : Controller
     {
+        private readonly IRepositoryWrapper _repo;
+
+        public EmployeeController(IRepositoryWrapper repo)
+        {
+            _repo = repo;
+        }
+
         // GET: Employee
         public ActionResult Index()
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_repo.Employee.FindByCondition(e => e.IdentityUserId == userId).Any())
+            {
+                var employee = _repo.Employee.FindByCondition(e => e.IdentityUserId == userId);
+                return View(employee);
+            }
+            else
+            {
+                return RedirectToAction("Create");
+            }
         }
 
         // GET: Employee/Details/5
@@ -30,17 +50,23 @@ namespace TrashCollectorV2.Controllers
         // POST: Employee/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Employee employee)
         {
             try
             {
-                // TODO: Add insert logic here
+                Employee newEmployee = new Employee
+                {
+                    Name = employee.Name,
+                    ZipCode = employee.ZipCode
+                };
 
+                _repo.Employee.CreateEmployee(newEmployee);
+                _repo.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(employee);
             }
         }
 

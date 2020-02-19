@@ -13,5 +13,9 @@ namespace TrashCollectorV2.Data
             : base(applicationDbContext)
         {
         }
+
+        public Customer GetCustomer(int customerId) => FindByCondition(c => c.Id == customerId).SingleOrDefault();
+
+        public void CreateCustomer(Customer customer) => Create(customer);
     }
 }

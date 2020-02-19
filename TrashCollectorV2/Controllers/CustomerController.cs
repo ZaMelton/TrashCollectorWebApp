@@ -1,18 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TrashCollectorV2.Contracts;
+using TrashCollectorV2.Models;
 
 namespace TrashCollectorV2.Controllers
 {
     public class CustomerController : Controller
     {
+        private readonly IRepositoryWrapper _repo;
+
+        public CustomerController(IRepositoryWrapper repo)
+        {
+            _repo = repo;
+        }
+
         // GET: Customer
         public ActionResult Index()
         {
-            return View();
+            
+            ViewModel customerView = new ViewModel();
+
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_repo.Customer.FindByCondition(e => e.IdentityUserId == userId).Any())
+            {
+                var customer = _repo.Customer.FindByCondition(e => e.IdentityUserId == userId).FirstOrDefault();
+                customerView.Customer = customer;
+
+                customerView.Address = _repo.Address.FindByCondition(a => a.Id == customer.AddressId).FirstOrDefault();
+                
+                return View(customerView);
+            }
+            else
+            {
+                return RedirectToAction("Create");
+            }
         }
 
         // GET: Customer/Details/5
@@ -30,12 +56,21 @@ namespace TrashCollectorV2.Controllers
         // POST: Customer/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Customer customer)
         {
             try
             {
-                // TODO: Add insert logic here
+                _repo.Address.Create(customer.Address);
+                _repo.Save();
 
+                Customer newCustomer = new Customer();
+                
+                newCustomer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                newCustomer.Name = customer.Name;
+                newCustomer.AddressId = _repo.Address.FindByCondition(a => a.Equals(customer.Address)).FirstOrDefault().Id;
+
+                _repo.Customer.CreateCustomer(newCustomer);
+                _repo.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch

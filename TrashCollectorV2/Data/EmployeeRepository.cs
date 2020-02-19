@@ -13,5 +13,15 @@ namespace TrashCollectorV2.Data
             : base(applicationDbContext)
         {
         }
+
+        public void CreateEmployee(Employee employee)
+        {
+            Create(employee);
+        }
+
+        public Employee GetEmployee(int employeeId)
+        {
+            return FindByCondition(e => e.Id == employeeId).SingleOrDefault();
+        }
     }
 }
