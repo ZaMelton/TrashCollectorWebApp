@@ -63,11 +63,12 @@ namespace TrashCollectorV2.Controllers
                 _repo.Address.Create(customer.Address);
                 _repo.Save();
 
-                Customer newCustomer = new Customer();
-                
-                newCustomer.IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                newCustomer.Name = customer.Name;
-                newCustomer.AddressId = _repo.Address.FindByCondition(a => a.Equals(customer.Address)).FirstOrDefault().Id;
+                Customer newCustomer = new Customer
+                {
+                    IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                    Name = customer.Name,
+                    AddressId = _repo.Address.FindByCondition(a => a.Equals(customer.Address)).FirstOrDefault().Id
+                };
 
                 _repo.Customer.CreateCustomer(newCustomer);
                 _repo.Save();

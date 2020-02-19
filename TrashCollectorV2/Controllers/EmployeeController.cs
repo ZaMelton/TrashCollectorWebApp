@@ -23,11 +23,15 @@ namespace TrashCollectorV2.Controllers
         // GET: Employee
         public ActionResult Index()
         {
+            ViewModel employeeView = new ViewModel(); 
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_repo.Employee.FindByCondition(e => e.IdentityUserId == userId).Any())
             {
-                var employee = _repo.Employee.FindByCondition(e => e.IdentityUserId == userId);
-                return View(employee);
+                var employee = _repo.Employee.FindByCondition(e => e.IdentityUserId == userId).FirstOrDefault();
+                employeeView.Employee = employee;
+                var customers = _repo.Customer.FindByCondition(c => c.Address.ZipCode == employee.ZipCode);
+                employeeView.CustomerList = customers;
+                return View(employeeView);
             }
             else
             {
@@ -56,12 +60,14 @@ namespace TrashCollectorV2.Controllers
             {
                 Employee newEmployee = new Employee
                 {
+                    IdentityUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier),
                     Name = employee.Name,
                     ZipCode = employee.ZipCode
                 };
 
                 _repo.Employee.CreateEmployee(newEmployee);
                 _repo.Save();
+
                 return RedirectToAction(nameof(Index));
             }
             catch
