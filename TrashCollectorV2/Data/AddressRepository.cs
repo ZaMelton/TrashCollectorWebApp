@@ -13,5 +13,7 @@ namespace TrashCollectorV2.Data
             : base(applicationDbContext)
         {
         }
+
+        public Address GetAddress(int addressId) => FindByCondition(c => c.Id == addressId).SingleOrDefault();
     }
 }

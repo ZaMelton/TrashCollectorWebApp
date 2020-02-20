@@ -8,5 +8,6 @@ namespace TrashCollectorV2.Contracts
 {
     public interface IAccountRepository : IRepositoryBase<Account>
     {
+        Account GetAccount(int accountId);
     }
 }

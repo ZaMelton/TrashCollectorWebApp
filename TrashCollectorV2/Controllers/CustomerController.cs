@@ -131,19 +131,19 @@ namespace TrashCollectorV2.Controllers
         {
             try
             {
-                _repo.Address.Create(customerView.Address);
-                _repo.Save();
-
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
-                Customer customerFromDb = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                var customerFromDb = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
                 customerFromDb.Name = customerView.Customer.Name;
                 _repo.Customer.Update(customerFromDb);
                 _repo.Save();
-                customerFromDb.AddressId = _repo.Address.FindByCondition(a => a.Equals(customerView.Address)).FirstOrDefault().Id;
-                _repo.Customer.Update(customerFromDb);
-                _repo.Save();
 
+                var addressFromDb = _repo.Address.GetAddress(customerFromDb.AddressId ?? default);
+                addressFromDb.StreetAddress = customerView.Address.StreetAddress;
+                addressFromDb.City = customerView.Address.City;
+                addressFromDb.State = customerView.Address.State;
+                addressFromDb.ZipCode = customerView.Address.ZipCode;
+                _repo.Address.Update(addressFromDb);
+                _repo.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -155,18 +155,30 @@ namespace TrashCollectorV2.Controllers
         // GET: Customer/Edit/5
         public ActionResult EditAccount()
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+            var account = _repo.Account.GetAccount(customer.AccountId ?? default);
+            return View(account);
         }
 
         // POST: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditAccount(Account account)
+        public ActionResult EditAccount(Account accountFromForm)
         {
             try
             {
-                // TODO: Add update logic here
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                var accountFromDb = _repo.Account.GetAccount(customer.AccountId ?? default);
+                accountFromDb.PickupDay = accountFromForm.PickupDay;
+                accountFromDb.OneTimePickup = accountFromForm.OneTimePickup;
+                accountFromDb.StartSuspend = accountFromForm.StartSuspend;
+                accountFromDb.EndSuspend = accountFromForm.EndSuspend;
+                _repo.Account.Update(accountFromDb);
+                _repo.Save();
 
+                //customer.AccountId = accountFromDb.Id;
                 return RedirectToAction(nameof(Index));
             }
             catch

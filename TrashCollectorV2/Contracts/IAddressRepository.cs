@@ -8,5 +8,6 @@ namespace TrashCollectorV2.Contracts
 {
     public interface IAddressRepository : IRepositoryBase<Address>
     {
+        Address GetAddress(int addressId);
     }
 }
