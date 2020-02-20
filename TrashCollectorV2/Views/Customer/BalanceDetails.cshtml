@@ -1,0 +1,28 @@
+﻿@model TrashCollectorV2.Models.Account
+
+@{
+    ViewData["Title"] = "BalanceDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>BalanceDetails</h1>
+
+<div>
+    <h4>Account</h4>
+    <hr />
+    <dl class="row">
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Balance)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Balance)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-outline-primary" asp-action="Index">Home</a>
+</div>
+<div>
+    <a class="btn btn-outline-primary" asp-action="">Pay Balance</a>
+</div>

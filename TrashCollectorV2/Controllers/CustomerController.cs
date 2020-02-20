@@ -50,6 +50,16 @@ namespace TrashCollectorV2.Controllers
             return View(customerView);
         }
 
+        // GET: Customer/BalanceDetails
+        public ActionResult BalanceDetails()
+        {
+            ViewModel customerView = new ViewModel();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+            var account = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
+            return View(account);
+        }
+
         // GET: Customer/Create
         public ActionResult Create()
         {
@@ -152,7 +162,7 @@ namespace TrashCollectorV2.Controllers
             }
         }
 
-        // GET: Customer/Edit/5
+        // GET: Account/Edit/5
         public ActionResult EditAccount()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -161,7 +171,7 @@ namespace TrashCollectorV2.Controllers
             return View(account);
         }
 
-        // POST: Customer/Edit/5
+        // POST: Account/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditAccount(Account accountFromForm)
@@ -173,6 +183,103 @@ namespace TrashCollectorV2.Controllers
                 var accountFromDb = _repo.Account.GetAccount(customer.AccountId ?? default);
                 accountFromDb.PickupDay = accountFromForm.PickupDay;
                 accountFromDb.OneTimePickup = accountFromForm.OneTimePickup;
+                accountFromDb.StartSuspend = accountFromForm.StartSuspend;
+                accountFromDb.EndSuspend = accountFromForm.EndSuspend;
+                _repo.Account.Update(accountFromDb);
+                _repo.Save();
+
+                //customer.AccountId = accountFromDb.Id;
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Account/Edit/5
+        public ActionResult EditWeeklyPickup()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+            var account = _repo.Account.GetAccount(customer.AccountId ?? default);
+            return View(account);
+        }
+
+        // POST: Account/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditWeeklyPickup(Account accountFromForm)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                var accountFromDb = _repo.Account.GetAccount(customer.AccountId ?? default);
+                accountFromDb.PickupDay = accountFromForm.PickupDay;
+                _repo.Account.Update(accountFromDb);
+                _repo.Save();
+
+                //customer.AccountId = accountFromDb.Id;
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Account/Edit/5
+        public ActionResult EditOneTimePickup()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+            var account = _repo.Account.GetAccount(customer.AccountId ?? default);
+            return View(account);
+        }
+
+        // POST: Account/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditOneTimePickup(Account accountFromForm)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                var accountFromDb = _repo.Account.GetAccount(customer.AccountId ?? default);
+                accountFromDb.OneTimePickup = accountFromForm.OneTimePickup;
+                _repo.Account.Update(accountFromDb);
+                _repo.Save();
+
+                //customer.AccountId = accountFromDb.Id;
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Account/Edit/5
+        public ActionResult EditSuspendDates()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+            var account = _repo.Account.GetAccount(customer.AccountId ?? default);
+            return View(account);
+        }
+
+        // POST: Account/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditSuspendDates(Account accountFromForm)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                var accountFromDb = _repo.Account.GetAccount(customer.AccountId ?? default);
                 accountFromDb.StartSuspend = accountFromForm.StartSuspend;
                 accountFromDb.EndSuspend = accountFromForm.EndSuspend;
                 _repo.Account.Update(accountFromDb);

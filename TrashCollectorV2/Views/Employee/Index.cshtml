@@ -50,11 +50,17 @@
     <tbody>
         @foreach (var item in Model.CustomerList)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address.StreetAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address.City)
+            </td>
+        </tr>
         }
     </tbody>
 
