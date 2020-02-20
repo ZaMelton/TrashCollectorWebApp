@@ -22,7 +22,6 @@ namespace TrashCollectorV2.Controllers
         // GET: Customer
         public ActionResult Index()
         {
-            
             ViewModel customerView = new ViewModel();
 
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -30,8 +29,6 @@ namespace TrashCollectorV2.Controllers
             {
                 var customer = _repo.Customer.FindByCondition(e => e.IdentityUserId == userId).FirstOrDefault();
                 customerView.Customer = customer;
-
-                customerView.Address = _repo.Address.FindByCondition(a => a.Id == customer.AddressId).FirstOrDefault();
                 
                 return View(customerView);
             }
@@ -42,9 +39,16 @@ namespace TrashCollectorV2.Controllers
         }
 
         // GET: Customer/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
-            return View();
+            ViewModel customerView = new ViewModel();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+            customerView.Customer = customer;
+            customerView.Address = _repo.Address.FindByCondition(a => a.Id == customer.AddressId).FirstOrDefault();
+            //customerView.Account = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
+            //customerView.Pickup = _repo.Pickup.FindByCondition(p => p.Id == customer.Account.PickupId).FirstOrDefault();
+            return View(customerView);
         }
 
         // GET: Customer/Create

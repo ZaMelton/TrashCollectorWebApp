@@ -13,12 +13,15 @@ namespace TrashCollectorV2.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+
         [ForeignKey("Address")]
         public int? AddressId { get; set; }
         public Address Address { get; set; }
+
         [ForeignKey("Account")]
         public int? AccountId { get; set; }
         public Account Account { get; set; }
+
         [ForeignKey("Identity User")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }

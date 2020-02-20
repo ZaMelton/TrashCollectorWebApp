@@ -14,7 +14,6 @@ namespace TrashCollectorV2
         private IAddressRepository _address;
         private ICustomerRepository _customer;
         private IEmployeeRepository _employee;
-        private IPickupRepository _pickup;
 
         public IAccountRepository Account
         {
@@ -61,18 +60,6 @@ namespace TrashCollectorV2
                     _employee = new EmployeeRepository(_context);
                 }
                 return _employee;
-            }
-        }
-
-        public IPickupRepository Pickup
-        {
-            get
-            {
-                if (_pickup == null)
-                {
-                    _pickup = new PickupRepository(_context);
-                }
-                return _pickup;
             }
         }
 

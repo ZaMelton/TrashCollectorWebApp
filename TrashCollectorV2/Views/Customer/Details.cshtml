@@ -1,0 +1,85 @@
+﻿@model TrashCollectorV2.Models.ViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Customer</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Customer.Name)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Customer.Name)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Address.StreetAddress)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Address.StreetAddress)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Address.State)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Address.State)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Address.City)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Address.City)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Address.ZipCode)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Address.ZipCode)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Account.Balance)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Account.Balance)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Account.IsSuspended)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Account.IsSuspended)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Account.PickupDay)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Account.PickupDay)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Account.OneTimePickup)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Account.OneTimePickup)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Account.StartSuspend)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Account.StartSuspend)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Account.EndSuspend)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Account.EndSuspend)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -11,7 +11,6 @@ namespace TrashCollectorV2.Contracts
         ICustomerRepository Customer { get; }
         IAddressRepository Address { get; }
         IAccountRepository Account { get; }
-        IPickupRepository Pickup { get; }
         void Save();
     }
 }

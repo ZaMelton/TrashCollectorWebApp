@@ -5,47 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Welcome @Model.Customer.Name</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Customer.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address.StreetAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address.State)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address.ZipCode)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
     <tbody>
         <tr>
             <td>
-                @Html.DisplayFor(model => model.Customer.Name)
+                <a asp-action="Details" asp-route-id="Model.Customer.Id">Account Details</a>
             </td>
             <td>
-                @Html.DisplayFor(model => model.Address.StreetAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Address.State)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Address.ZipCode)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <a asp-action="Create" asp-route-id="Model.Customer.Id">Create Pickup Account</a>
             </td>
         </tr>
     </tbody>

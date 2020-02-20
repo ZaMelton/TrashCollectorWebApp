@@ -9,6 +9,7 @@ namespace TrashCollectorV2.Models
     {
         public Customer Customer { get; set; }
         public Address Address { get; set; }
+        public Account Account { get; set; }
         public Employee Employee { get; set; }
         public IQueryable<Customer> CustomerList { get; set; }
     }

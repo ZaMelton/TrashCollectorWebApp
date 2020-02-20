@@ -12,9 +12,21 @@ namespace TrashCollectorV2.Models
         [Key]
         public int Id { get; set; }
         public double Balance { get; set; }
+        [Display(Name = "Service Suspended")]
         public bool IsSuspended { get; set; }
-        [ForeignKey("Pickup")]
-        public int? PickupId { get; set; }
-        public Pickup Pickup { get; set; }
+
+        [Display(Name = "Pickup Day")]
+        public DayOfWeek PickupDay { get; set; }
+        public DateTime NextPickupDate { get; set; }
+        public bool PickedUp { get; set; }
+
+        [Display(Name = "One Time Pickup")]
+        public DateTime OneTimePickup { get; set; }
+
+        [Display(Name = "Start Suspend")]
+        public DateTime StartSuspend { get; set; }
+
+        [Display(Name = "End Suspend")]
+        public DateTime EndSuspend { get; set; }
     }
 }
