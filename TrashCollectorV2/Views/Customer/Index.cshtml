@@ -11,10 +11,13 @@
     <tbody>
         <tr>
             <td>
-                <a asp-action="Details" asp-route-id="Model.Customer.Id">Account Details</a>
+                <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="Model.Customer.Id">Account Details</a>
             </td>
             <td>
-                <a asp-action="Create" asp-route-id="Model.Customer.Id">Create Pickup Account</a>
+                @if (Model.Customer.AccountId == null)
+                {
+                    <a class="btn btn-outline-success" asp-action="CreateAccount" asp-route-id="Model.Customer.Id">Get Started With Pickups</a>
+                }
             </td>
         </tr>
     </tbody>

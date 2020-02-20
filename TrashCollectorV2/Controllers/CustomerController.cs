@@ -46,8 +46,7 @@ namespace TrashCollectorV2.Controllers
             var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
             customerView.Customer = customer;
             customerView.Address = _repo.Address.FindByCondition(a => a.Id == customer.AddressId).FirstOrDefault();
-            //customerView.Account = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
-            //customerView.Pickup = _repo.Pickup.FindByCondition(p => p.Id == customer.Account.PickupId).FirstOrDefault();
+            customerView.Account = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
             return View(customerView);
         }
 
@@ -84,8 +83,77 @@ namespace TrashCollectorV2.Controllers
             }
         }
 
+        // GET: Account/Create
+        public ActionResult CreateAccount()
+        {
+            Account account = new Account();
+            return View(account);
+        }
+
+        // POST: Account/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAccount(Account account)
+        {
+            try
+            {
+                _repo.Account.Create(account);
+                _repo.Save();
+
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                customer.AccountId = _repo.Account.FindByCondition(a => a.Equals(account)).FirstOrDefault().Id;
+                _repo.Customer.Update(customer);
+                _repo.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         // GET: Customer/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit()
+        {
+            ViewModel customerView = new ViewModel();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+            customerView.Customer = customer;
+            customerView.Address = _repo.Address.FindByCondition(a => a.Id == customer.AddressId).FirstOrDefault();
+            return View(customerView);
+        }
+
+        // POST: Customer/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(ViewModel customerView)
+        {
+            try
+            {
+                _repo.Address.Create(customerView.Address);
+                _repo.Save();
+
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                Customer customerFromDb = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
+                customerFromDb.Name = customerView.Customer.Name;
+                _repo.Customer.Update(customerFromDb);
+                _repo.Save();
+                customerFromDb.AddressId = _repo.Address.FindByCondition(a => a.Equals(customerView.Address)).FirstOrDefault().Id;
+                _repo.Customer.Update(customerFromDb);
+                _repo.Save();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // GET: Customer/Edit/5
+        public ActionResult EditAccount()
         {
             return View();
         }
@@ -93,7 +161,7 @@ namespace TrashCollectorV2.Controllers
         // POST: Customer/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult EditAccount(Account account)
         {
             try
             {
