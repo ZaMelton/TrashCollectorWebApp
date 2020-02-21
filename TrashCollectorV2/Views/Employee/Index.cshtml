@@ -5,47 +5,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<h1>Welcome, @Model.Employee.Name</h1>
+<br />
+<h4>Today's Pickups in Area @Model.Employee.ZipCode</h4>
+<br />
+<table class="table table-hover">
     <thead>
-        <tr>
+        <tr class="table-dark">
             <th>
-                @Html.DisplayNameFor(model => model.Employee.Name)
+                @Html.DisplayNameFor(model => model.Customer.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee.ZipCode)
+                @Html.DisplayNameFor(model => model.Customer.Address.StreetAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer.Address.City)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Employee.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Employee.ZipCode)
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Your Customers
-            </th>
-        </tr>
-    </thead>
-    <tbody>
         @foreach (var item in Model.CustomerList)
         {
-        <tr>
+        <tr class="table-light">
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -55,8 +37,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Address.City)
             </td>
+            <td>
+                <a class="btn btn-outline-success" asp-action="ConfirmPickup" asp-route-accountId="@item.AccountId">Confirm Pickup</a>
+            </td>
         </tr>
         }
     </tbody>
-
 </table>
+<br/>
+<a class="btn btn-outline-primary" asp-action="FilterByDay">Filter By Day</a>

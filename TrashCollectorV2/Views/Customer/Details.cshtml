@@ -45,7 +45,7 @@
             @Html.DisplayNameFor(model => model.Account.Balance)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.Balance)
+            $@Html.DisplayFor(model => model.Account.Balance)
         </dd>
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Account.PickupDay)
@@ -57,19 +57,19 @@
             @Html.DisplayNameFor(model => model.Account.OneTimePickup)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.OneTimePickup)
+            @Html.DisplayFor(model => model.Account.OneTimePickup.Date)
         </dd>
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Account.StartSuspend)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.StartSuspend)
+            @Html.DisplayFor(model => model.Account.StartSuspend.Date)
         </dd>
         <dt class="col-sm-3">
             @Html.DisplayNameFor(model => model.Account.EndSuspend)
         </dt>
         <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.EndSuspend)
+            @Html.DisplayFor(model => model.Account.EndSuspend.Date)
         </dd>
     </dl>
 </div>

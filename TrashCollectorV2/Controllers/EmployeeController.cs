@@ -69,6 +69,35 @@ namespace TrashCollectorV2.Controllers
             return customers;
         }
 
+        public ActionResult ConfirmPickup(int accountId)
+        {
+            Account accountFromDb = _repo.Account.FindByCondition(a => a.Id == accountId).FirstOrDefault();
+            accountFromDb.NextPickupDate = accountFromDb.NextPickupDate.AddDays(7);
+            accountFromDb.Balance += 10000;
+            _repo.Account.Update(accountFromDb);
+            _repo.Save();
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult FilterByDay()
+        {
+            ViewModel viewModel = new ViewModel();
+            var customers = _repo.Customer.GetCustomersIncludeAll();
+            customers = customers.Where(c => c.Account.PickupDay == viewModel.FilterDay && !c.Account.IsSuspended).ToList();
+            viewModel.CustomerList = customers;
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult FilterByDay(ViewModel viewModel)
+        {
+            var customers = _repo.Customer.GetCustomersIncludeAll();
+            customers = customers.Where(c => c.Account.PickupDay == viewModel.FilterDay && !c.Account.IsSuspended).ToList();
+            viewModel.CustomerList = customers;
+            return View(viewModel);
+        }
+
         // GET: Employee/Details/5
         public ActionResult Details(int id)
         {

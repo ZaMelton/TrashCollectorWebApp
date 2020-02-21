@@ -12,5 +12,6 @@ namespace TrashCollectorV2.Models
         public Account Account { get; set; }
         public Employee Employee { get; set; }
         public List<Customer> CustomerList { get; set; }
+        public DayOfWeek? FilterDay { get; set; }
     }
 }

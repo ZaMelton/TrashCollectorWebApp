@@ -1,0 +1,70 @@
+﻿@model TrashCollectorV2.Models.ViewModel
+
+@{
+    ViewData["Title"] = "FilterByDay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>FilterByDay</h1>
+<br />
+<div>
+    <form asp-action="FilterByDay">
+        <div class="form-group">
+            <select class="form-control-sm" asp-for="FilterDay">
+                <option value="0">Sunday</option>
+                <option value="1">Monday</option>
+                <option value="2">Tuesday</option>
+                <option value="3">Wednesday</option>
+                <option value="4">Thursday</option>
+                <option value="5">Friday</option>
+                <option value="6">Saturday</option>
+            </select>
+            <div>
+                <br />
+                <input type="submit" value="Search" class="btn btn-outline-primary" />
+            </div>
+        </div> 
+    </form>
+
+    <br />
+    @if (Model.CustomerList.Count != 0 && Model.FilterDay != null)
+    {
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.Address.StreetAddress)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Customer.Address.City)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CustomerList)
+                {
+                    <tr class="table-light">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address.StreetAddress)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address.City)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else if(Model.CustomerList.Count == 0 && Model.FilterDay != null)
+    {
+        <h6>There are no customers matching that day.</h6>
+    }
+</div>
+<a class="btn btn-outline-primary" asp-action="Index">Home</a>
+
