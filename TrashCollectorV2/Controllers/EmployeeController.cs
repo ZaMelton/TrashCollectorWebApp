@@ -29,14 +29,44 @@ namespace TrashCollectorV2.Controllers
             {
                 var employee = _repo.Employee.FindByCondition(e => e.IdentityUserId == userId).FirstOrDefault();
                 employeeView.Employee = employee;
-                var customers = _repo.Customer.FindByCondition(c => c.Address.ZipCode == employee.ZipCode);
-                employeeView.CustomerList = customers;
+                var customers = _repo.Customer.GetCustomersIncludeAll();
+                customers = CheckSuspendedCustomers(customers);
+                employeeView.CustomerList = GetTodaysCustomers(customers);
                 return View(employeeView);
             }
             else
             {
                 return RedirectToAction("Create");
             }
+        }
+
+        public List<Customer> GetTodaysCustomers(List<Customer> customers)
+        {
+            customers = customers.Where(c => c.Account.NextPickupDate.Date == DateTime.Now.Date && !c.Account.IsSuspended).ToList();
+            return customers;
+        }
+
+        public List<Customer> CheckSuspendedCustomers(List<Customer> customers)
+        {
+            foreach(var customer in customers)
+            {
+                if (DateTime.Now >= customer.Account.StartSuspend && DateTime.Now < customer.Account.EndSuspend)
+                {
+                    customer.Account.IsSuspended = true;
+                    Account accountFromDb = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
+                    accountFromDb.IsSuspended = true;
+                    _repo.Account.Update(accountFromDb);
+                    _repo.Save();
+                }
+                else
+                {
+                    Account accountFromDb = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
+                    accountFromDb.IsSuspended = false;
+                    _repo.Account.Update(accountFromDb);
+                    _repo.Save();
+                }
+            }
+            return customers;
         }
 
         // GET: Employee/Details/5

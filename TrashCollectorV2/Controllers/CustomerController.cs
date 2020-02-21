@@ -107,6 +107,14 @@ namespace TrashCollectorV2.Controllers
         {
             try
             {
+                //this will set the next pickup day so that you can use this for the employee when they pickup customeres trash
+                //when the employee picks up trash, the next pickup will be set to the next week
+                DateTime nextPickup = DateTime.Now;
+                while (!nextPickup.DayOfWeek.Equals(account.PickupDay))
+                {
+                    nextPickup = nextPickup.AddDays(1);
+                }
+                account.NextPickupDate = nextPickup;
                 _repo.Account.Create(account);
                 _repo.Save();
 
@@ -181,7 +189,15 @@ namespace TrashCollectorV2.Controllers
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
                 var accountFromDb = _repo.Account.GetAccount(customer.AccountId ?? default);
+
                 accountFromDb.PickupDay = accountFromForm.PickupDay;
+                DateTime nextPickup = DateTime.Now;
+                while (!nextPickup.DayOfWeek.Equals(accountFromForm.PickupDay))
+                {
+                    nextPickup = nextPickup.AddDays(1);
+                }
+                accountFromDb.NextPickupDate = nextPickup;
+
                 accountFromDb.OneTimePickup = accountFromForm.OneTimePickup;
                 accountFromDb.StartSuspend = accountFromForm.StartSuspend;
                 accountFromDb.EndSuspend = accountFromForm.EndSuspend;
@@ -217,6 +233,12 @@ namespace TrashCollectorV2.Controllers
                 var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
                 var accountFromDb = _repo.Account.GetAccount(customer.AccountId ?? default);
                 accountFromDb.PickupDay = accountFromForm.PickupDay;
+                DateTime nextPickup = DateTime.Now;
+                while (!nextPickup.DayOfWeek.Equals(accountFromForm.PickupDay))
+                {
+                    nextPickup = nextPickup.AddDays(1);
+                }
+                accountFromDb.NextPickupDate = nextPickup;
                 _repo.Account.Update(accountFromDb);
                 _repo.Save();
 

@@ -21,12 +21,12 @@ namespace TrashCollectorV2.Models
         public bool PickedUp { get; set; }
 
         [Display(Name = "One Time Pickup")]
-        public DateTime? OneTimePickup { get; set; }
+        public DateTime OneTimePickup { get; set; }
 
         [Display(Name = "Start Suspend")]
-        public DateTime? StartSuspend { get; set; }
+        public DateTime StartSuspend { get; set; }
 
         [Display(Name = "End Suspend")]
-        public DateTime? EndSuspend { get; set; }
+        public DateTime EndSuspend { get; set; }
     }
 }

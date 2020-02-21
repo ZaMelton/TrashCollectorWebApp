@@ -19,28 +19,18 @@
                 <span asp-validation-for="PickupDay" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NextPickupDate" class="control-label"></label>
-                <input asp-for="NextPickupDate" class="form-control" />
-                <span asp-validation-for="NextPickupDate" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="PickedUp" /> @Html.DisplayNameFor(model => model.PickedUp)
-                </label>
-            </div>
-            <div class="form-group">
                 <label asp-for="OneTimePickup" class="control-label"></label>
-                <input asp-for="OneTimePickup" class="form-control" />
+                <input asp-for="OneTimePickup" class="form-control" type ="date"/>
                 <span asp-validation-for="OneTimePickup" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartSuspend" class="control-label"></label>
-                <input asp-for="StartSuspend" class="form-control" />
+                <input asp-for="StartSuspend" class="form-control" type ="date"/>
                 <span asp-validation-for="StartSuspend" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndSuspend" class="control-label"></label>
-                <input asp-for="EndSuspend" class="form-control" />
+                <input asp-for="EndSuspend" class="form-control" type ="date"/>
                 <span asp-validation-for="EndSuspend" class="text-danger"></span>
             </div>
             <div class="form-group">

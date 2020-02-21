@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,5 +18,7 @@ namespace TrashCollectorV2.Data
         public Customer GetCustomer(int customerId) => FindByCondition(c => c.Id == customerId).SingleOrDefault();
 
         public void CreateCustomer(Customer customer) => Create(customer);
+
+        public List<Customer> GetCustomersIncludeAll() => FindAll().Include(a => a.Address).Include(b => b.Account).ToList();
     }
 }
