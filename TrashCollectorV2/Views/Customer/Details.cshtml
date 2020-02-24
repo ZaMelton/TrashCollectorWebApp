@@ -8,7 +8,6 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Customer</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-3">
@@ -47,34 +46,34 @@
         <dd class="col-sm-9">
             $@Html.DisplayFor(model => model.Account.Balance)
         </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Account.PickupDay)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.PickupDay)
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Account.OneTimePickup)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.OneTimePickup.Date)
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Account.StartSuspend)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.StartSuspend.Date)
-        </dd>
-        <dt class="col-sm-3">
-            @Html.DisplayNameFor(model => model.Account.EndSuspend)
-        </dt>
-        <dd class="col-sm-9">
-            @Html.DisplayFor(model => model.Account.EndSuspend.Date)
-        </dd>
     </dl>
+        <dl class="row">
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Account.PickupDay)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Account.PickupDay)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Account.OneTimePickup)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Account.OneTimePickup.Date)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Account.StartSuspend)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Account.StartSuspend.Date)
+            </dd>
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.Account.EndSuspend)
+            </dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Account.EndSuspend.Date)
+            </dd>
+        </dl>
 </div>
 <div>
     <a class="btn btn-outline-primary" asp-action="Index">Home</a>
-    <a class="btn btn-primary" asp-action="Edit">Edit Customer Details</a>
-    <a class="btn btn-primary" asp-action="EditAccount">Edit Pickup Details</a>
 </div>

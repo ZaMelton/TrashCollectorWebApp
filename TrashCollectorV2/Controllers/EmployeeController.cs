@@ -30,6 +30,7 @@ namespace TrashCollectorV2.Controllers
                 var employee = _repo.Employee.FindByCondition(e => e.IdentityUserId == userId).FirstOrDefault();
                 employeeView.Employee = employee;
                 var customers = _repo.Customer.GetCustomersIncludeAll();
+                customers = customers.Where(c => c.Address.ZipCode == employee.ZipCode).ToList();
                 customers = CheckSuspendedCustomers(customers);
                 employeeView.CustomerList = GetTodaysCustomers(customers);
                 return View(employeeView);
@@ -42,7 +43,8 @@ namespace TrashCollectorV2.Controllers
 
         public List<Customer> GetTodaysCustomers(List<Customer> customers)
         {
-            customers = customers.Where(c => c.Account.NextPickupDate.Date == DateTime.Now.Date && !c.Account.IsSuspended).ToList();
+            customers = customers.Where(c => c.Account.NextPickupDate.Date == DateTime.Today 
+                                        || c.Account.OneTimePickup.Date == DateTime.Today).ToList();
             return customers;
         }
 
@@ -50,7 +52,7 @@ namespace TrashCollectorV2.Controllers
         {
             foreach(var customer in customers)
             {
-                if (DateTime.Now >= customer.Account.StartSuspend && DateTime.Now < customer.Account.EndSuspend)
+                if (DateTime.Today >= customer.Account.StartSuspend && DateTime.Today < customer.Account.EndSuspend)
                 {
                     customer.Account.IsSuspended = true;
                     Account accountFromDb = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
@@ -72,7 +74,14 @@ namespace TrashCollectorV2.Controllers
         public ActionResult ConfirmPickup(int accountId)
         {
             Account accountFromDb = _repo.Account.FindByCondition(a => a.Id == accountId).FirstOrDefault();
-            accountFromDb.NextPickupDate = accountFromDb.NextPickupDate.AddDays(7);
+            if(accountFromDb.NextPickupDate.Date == DateTime.Today)
+            {
+                accountFromDb.NextPickupDate = accountFromDb.NextPickupDate.AddDays(7);
+            }
+            if (accountFromDb.OneTimePickup.Date == DateTime.Today)
+            {
+                accountFromDb.OneTimePickup = accountFromDb.OneTimePickup.AddYears(1);
+            }
             accountFromDb.Balance += 10000;
             _repo.Account.Update(accountFromDb);
             _repo.Save();
@@ -83,7 +92,6 @@ namespace TrashCollectorV2.Controllers
         {
             ViewModel viewModel = new ViewModel();
             var customers = _repo.Customer.GetCustomersIncludeAll();
-            customers = customers.Where(c => c.Account.PickupDay == viewModel.FilterDay && !c.Account.IsSuspended).ToList();
             viewModel.CustomerList = customers;
             return View(viewModel);
         }
@@ -92,16 +100,14 @@ namespace TrashCollectorV2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult FilterByDay(ViewModel viewModel)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employee = _repo.Employee.FindByCondition(e => e.IdentityUserId == userId).FirstOrDefault();
             var customers = _repo.Customer.GetCustomersIncludeAll();
-            customers = customers.Where(c => c.Account.PickupDay == viewModel.FilterDay && !c.Account.IsSuspended).ToList();
+            customers = customers.Where(c => c.Account.PickupDay == viewModel.FilterDay 
+                                        && c.Address.ZipCode == employee.ZipCode 
+                                        && !c.Account.IsSuspended).ToList();
             viewModel.CustomerList = customers;
             return View(viewModel);
-        }
-
-        // GET: Employee/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: Employee/Create
@@ -135,50 +141,11 @@ namespace TrashCollectorV2.Controllers
             }
         }
 
-        // GET: Employee/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult CustomerDetails(int customerId)
         {
-            return View();
-        }
-
-        // POST: Employee/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Employee/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Employee/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var customer = _repo.Customer.GetCustomer(customerId);
+            customer.Address = _repo.Address.FindByCondition(a => a.Id == customer.AddressId).FirstOrDefault();
+            return View(customer);
         }
     }
 }

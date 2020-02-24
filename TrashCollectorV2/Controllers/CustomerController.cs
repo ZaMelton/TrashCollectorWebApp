@@ -204,7 +204,6 @@ namespace TrashCollectorV2.Controllers
                 _repo.Account.Update(accountFromDb);
                 _repo.Save();
 
-                //customer.AccountId = accountFromDb.Id;
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -308,29 +307,6 @@ namespace TrashCollectorV2.Controllers
                 _repo.Save();
 
                 //customer.AccountId = accountFromDb.Id;
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Customer/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Customer/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch

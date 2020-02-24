@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+    <script type='text/javascript' src='keys.js'></script>
+    <script type='text/javascript' src='site.js'></script>
+
 <h1>Welcome, @Model.Employee.Name</h1>
 <br />
 <h4>Today's Pickups in Area @Model.Employee.ZipCode</h4>
@@ -21,6 +24,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Customer.Address.City)
             </th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -39,6 +43,9 @@
             </td>
             <td>
                 <a class="btn btn-outline-success" asp-action="ConfirmPickup" asp-route-accountId="@item.AccountId">Confirm Pickup</a>
+            </td>
+            <td>
+                <a class="btn btn-outline-primary" asp-action="CustomerDetails" asp-route-customerId="@item.Id">Details</a>
             </td>
         </tr>
         }

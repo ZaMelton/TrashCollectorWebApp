@@ -6,24 +6,29 @@
 }
 
 <h1>Welcome, @Model.Customer.Name!</h1>
-<div>
-    @if (Model.Customer.AccountId == null)
-    {
-        <a class="btn btn-outline-success" asp-action="CreateAccount" asp-route-id="Model.Customer.Id">Get Started With Pickups</a>
-    }
-</div>
+
 <br />
-<div><a class="btn btn-outline-primary" asp-action="Details">Account Details</a></div>
+<div><a class="btn btn-outline-info col-sm-3" asp-action="Details">Account Details</a></div>
 <br />
-<div><a class="btn btn-outline-primary" asp-action="Edit">Edit Customer Information</a></div>
-<br />
-<div><a class="btn btn-outline-primary" asp-action="EditAccount">Edit All Pickup Information</a></div>
-<br />
-<div><a class="btn btn-outline-primary" asp-action="EditWeeklyPickup">Edit Weekly Pickup</a></div>
-<br />
-<div><a class="btn btn-outline-primary" asp-action="EditOneTimePickup">Edit One Time Pickup</a></div>
-<br />
-<div><a class="btn btn-outline-primary" asp-action="EditSuspendDates">Edit Suspend Dates</a></div>
-<br />
-<div><a class="btn btn-outline-primary" asp-action="BalanceDetails">Check/Pay Balance</a></div>
+@if (Model.Customer.AccountId == null)
+{
+    <div><a class="btn btn-outline-success col-sm-3" asp-action="CreateAccount" asp-route-id="Model.Customer.Id">Get Started With Pickups</a></div>
+}
+else
+{
+    <div><a class="btn btn-outline-primary col-sm-3" asp-action="BalanceDetails">Pay Balance</a></div>
+    <br />
+    <div><a class="btn btn-outline-primary col-sm-3" asp-action="Edit">Edit Customer Information</a></div>
+    <br />
+    <div><a class="btn btn-outline-primary col-sm-3" asp-action="EditAccount">Edit All Pickup Information</a></div>
+    <br />
+    <div><a class="btn btn-outline-primary col-sm-3" asp-action="EditWeeklyPickup">Edit Weekly Pickup</a></div>
+    <br />
+    <div><a class="btn btn-outline-primary col-sm-3" asp-action="EditOneTimePickup">Edit One Time Pickup</a></div>
+    <br />
+    <div><a class="btn btn-outline-primary col-sm-3" asp-action="EditSuspendDates">Edit Suspend Dates</a></div>
+}
+
+
+
 
