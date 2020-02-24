@@ -48,7 +48,7 @@
                 {
                     <tr class="table-light">
                         <td>
-                            @Html.DisplayFor(modelItem => item.Name)
+                            <a asp-action="CustomerDetails" asp-route-customerId="@item.Id">@item.Name</a>
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Address.StreetAddress)
