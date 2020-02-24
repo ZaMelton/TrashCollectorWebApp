@@ -5,10 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>CustomerDetails</h1>
+<h1>@Model.Name's Details</h1>
 
 <div>
-    <h4>Customer</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-3">
@@ -43,6 +42,43 @@
         </dd>
     </dl>
 </div>
+
+<script>
+    function initialize() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: { lat: 43.0389, lng: -87.9065 }
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        geocodeAddress(geocoder, map);
+    }
+
+    function geocodeAddress(geocoder, resultsMap) {
+        var address = "@Model.Address.StreetAddress + @Model.Address.City + @Model.Address.State + @Model.Address.ZipCode";
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === 'OK') {
+                resultsMap.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: resultsMap,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+</script>
+
+<body onload="initialize()">
+    <div class="col-sm-6" id="map" style="height:300px;"></div>
+</body>
+
+<script async defer
+    src = "@Api_Key.MY_KEY()" >
+</script>
+
+<br />
 <div>
     <a class="btn btn-outline-primary" asp-action="Index">Home</a>
 </div>

@@ -3,4 +3,3 @@
 
 // Write your JavaScript code.
 
-var myKey = config.MY_KEY;
