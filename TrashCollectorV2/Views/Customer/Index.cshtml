@@ -6,8 +6,7 @@
 }
 
 <h1>Welcome, @Model.Customer.Name!</h1>
-
-<br />
+<hr />
 <div><a class="btn btn-outline-info col-sm-3" asp-action="Details">Account Details</a></div>
 <br />
 @if (Model.Customer.AccountId == null)
@@ -18,7 +17,7 @@ else
 {
     <div><a class="btn btn-outline-primary col-sm-3" asp-action="BalanceDetails">Pay Balance</a></div>
     <br />
-    <div><a class="btn btn-outline-primary col-sm-3" asp-action="Edit">Edit Customer Information</a></div>
+    <div><a class="btn btn-outline-primary col-sm-3" asp-action="Edit">Edit Personal Information</a></div>
     <br />
     <div><a class="btn btn-outline-primary col-sm-3" asp-action="EditAccount">Edit All Pickup Information</a></div>
     <br />

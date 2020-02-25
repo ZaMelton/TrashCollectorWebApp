@@ -5,8 +5,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using TrashCollectorV2.Contracts;
 using TrashCollectorV2.Models;
+using Customer = TrashCollectorV2.Models.Customer;
+using Account = TrashCollectorV2.Models.Account;
 
 namespace TrashCollectorV2.Controllers
 {
@@ -57,7 +60,42 @@ namespace TrashCollectorV2.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var customer = _repo.Customer.FindByCondition(c => c.IdentityUserId == userId).FirstOrDefault();
             var account = _repo.Account.FindByCondition(a => a.Id == customer.AccountId).FirstOrDefault();
+            ViewBag.StripePublishKey = Api_Key.PAYMENT_KEY;
             return View(account);
+        }
+
+        public ActionResult Charge(string stripeEmail, string stripeToken, int accountId)
+        {
+            try
+            {
+                var customers = new CustomerService();
+                var charges = new ChargeService();
+
+                var account = _repo.Account.FindByCondition(a => a.Id == accountId).FirstOrDefault();
+                var customer = customers.Create(new CustomerCreateOptions
+                {
+                    Email = stripeEmail,
+                    Source = stripeToken
+                });
+
+                var charge = charges.Create(new ChargeCreateOptions
+                {
+                    Amount = (long)account.Balance,//charge in cents
+                    Description = "Sample Charge",
+                    Currency = "usd",
+                    Customer = customer.Id
+                });
+
+                account.Balance = 0;
+                _repo.Account.Update(account);
+                _repo.Save();
+
+                return View("BalanceDetails", account);
+            }
+            catch (Exception)
+            {
+                return View("Index");
+            }
         }
 
         // GET: Customer/Create

@@ -5,24 +5,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>BalanceDetails</h1>
-
+<h1>Balance Details</h1>
+<hr />
 <div>
-    <h4>Account</h4>
     <hr />
-    <dl class="row">
-
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-        <dd class = "col-sm-10">
-            $@Html.DisplayFor(model => model.Balance)
-        </dd>
-    </dl>
+    <form asp-action="Charge" method="POST" asp-route-accountId="@Model.Id">
+        <article>
+            <label>Balance: $@Model.Balance.00</label>
+        </article>
+        <script src="//checkout.stripe.com/v3/checkout.js"
+                class="stripe-button"
+                data-key="@ViewBag.StripePublishKey"
+                data-locale="auto"
+                data-description="Trash Collector Bill"
+                data-amount="@(Model.Balance * 100)">
+        </script>
+    </form>
 </div>
+<br />
 <div>
     <a class="btn btn-outline-primary" asp-action="Index">Home</a>
 </div>
-<div>
-    <a class="btn btn-outline-primary" asp-action="">Pay Balance</a>
-</div>
+
+
+
